@@ -11,8 +11,12 @@ public class MapGeneratorEditor : Editor
 		base.OnInspectorGUI();
 
 		MapGenerator mg = target as MapGenerator;
-		mg.mapSize.x = Mathf.Clamp((int) mg.mapSize.x, 0, (int) mg.mapSize.x);
-		mg.mapSize.y = Mathf.Clamp((int) mg.mapSize.y, 0, (int) mg.mapSize.y);
+		mg.mapIndex = Mathf.Clamp(mg.mapIndex, 0, mg.maps.Length - 1);
+		foreach (MapGenerator.Map map in mg.maps)
+		{
+			map.mapSize.x = Mathf.Clamp(map.mapSize.x, 0, map.mapSize.x);
+			map.mapSize.y = Mathf.Clamp(map.mapSize.y, 0, map.mapSize.y);
+		}
 		mg.GenerateMap();
 	}
 }
