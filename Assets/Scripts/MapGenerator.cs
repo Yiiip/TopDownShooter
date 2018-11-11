@@ -6,7 +6,11 @@ public class MapGenerator : MonoBehaviour
 {
 	public Transform tilePrefab;
 	public Transform obstaclePrefab;
+	public Transform navmeshFloor;
+	public Transform navmeshMaskPrefab;
+	public Vector2 maxMapSize;
 	public Vector2 mapSize;
+	public float tileSize = 1.0f;
 
 	[Range(0.0f, 100.0f)]
 	public float paddingPercent;
@@ -55,6 +59,7 @@ public class MapGenerator : MonoBehaviour
 		}
 		mapHolderTrans = new GameObject(mapHolderName).transform;
 		mapHolderTrans.parent = this.transform;
+		Vector3 tileScale = Vector3.one * (1.0f - paddingPercent / 100f) * tileSize;
 		for (int x = 0; x < mapSize.x; x++)
 		{
 			for (int y = 0; y < mapSize.y; y++)
@@ -62,8 +67,9 @@ public class MapGenerator : MonoBehaviour
 				//Middle Center的创建方式
 				Vector3 tilePos = GetPositionByCoord(x, y);
 				Transform newTile = GameObject.Instantiate(tilePrefab, tilePos, Quaternion.Euler(Vector3.right * 90.0f)) as Transform;
+				newTile.name = "Tile [" + x + "," + y + "]";
 				newTile.parent = mapHolderTrans;
-				newTile.localScale = Vector3.one * (1.0f - paddingPercent / 100f);
+				newTile.localScale = tileScale;
 			}
 		}
 		//生成障碍物
@@ -79,7 +85,9 @@ public class MapGenerator : MonoBehaviour
 			{
 				Vector3 obstaclePos = GetPositionByCoord(randomCoord.x, randomCoord.y) + Vector3.up * 0.5f;
 				Transform newObstacle = GameObject.Instantiate(obstaclePrefab, obstaclePos, Quaternion.identity) as Transform;
+				newObstacle.name = "Obstacle [" + randomCoord.x + "," + randomCoord.y + "]";
 				newObstacle.parent = mapHolderTrans;
+				newObstacle.localScale = tileScale;
 			}
 			else
 			{
@@ -87,11 +95,33 @@ public class MapGenerator : MonoBehaviour
 				currentObstacleCount--;
 			}
 		}
+
+		Transform maskLeft = GameObject.Instantiate(navmeshMaskPrefab, (mapSize.x + maxMapSize.x) / 4f * tileSize * Vector3.left, Quaternion.identity) as Transform;
+		maskLeft.name = "Navmesh Mask Left";
+		maskLeft.parent = mapHolderTrans;
+		maskLeft.localScale = new Vector3((maxMapSize.x - mapSize.x) / 2f, 1.0f, mapSize.y) * tileSize;
+
+		Transform maskRight = GameObject.Instantiate(navmeshMaskPrefab, (mapSize.x + maxMapSize.x) / 4f * tileSize * Vector3.right, Quaternion.identity) as Transform;
+		maskRight.name = "Navmesh Mask Right";
+		maskRight.parent = mapHolderTrans;
+		maskRight.localScale = new Vector3((maxMapSize.x - mapSize.x) / 2f, 1.0f, mapSize.y) * tileSize;
+
+		Transform maskTop = GameObject.Instantiate(navmeshMaskPrefab, (mapSize.y + maxMapSize.y) / 4f * tileSize * Vector3.forward, Quaternion.identity) as Transform;
+		maskTop.name = "Navmesh Mask Top";
+		maskTop.parent = mapHolderTrans;
+		maskTop.localScale = new Vector3(maxMapSize.x, 1.0f, (maxMapSize.y - mapSize.y) / 2f) * tileSize;
+
+		Transform maskBottom = GameObject.Instantiate(navmeshMaskPrefab, (mapSize.y + maxMapSize.y) / 4f * tileSize * Vector3.back, Quaternion.identity) as Transform;
+		maskBottom.name = "Navmesh Mask Bottom";
+		maskBottom.parent = mapHolderTrans;
+		maskBottom.localScale = new Vector3(maxMapSize.x, 1.0f, (maxMapSize.y - mapSize.y) / 2f) * tileSize;
+
+		navmeshFloor.localScale = new Vector3(maxMapSize.x, maxMapSize.y, 0) * tileSize;
 	}
 
 	private Vector3 GetPositionByCoord(int x, int y)
 	{
-		Vector3 pos = new Vector3(0.5f + x - mapSize.x / 2, 0, 0.5f + y - mapSize.y / 2);
+		Vector3 pos = new Vector3(0.5f + x - mapSize.x / 2, 0, 0.5f + y - mapSize.y / 2) * tileSize;
 		return pos;
 	}
 
