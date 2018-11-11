@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using UnityEngine;
 
+[RequireComponent(typeof(BoxCollider))]
 public class MapGenerator : MonoBehaviour
 {
 	public Transform tilePrefab;
@@ -29,8 +30,8 @@ public class MapGenerator : MonoBehaviour
 	public void GenerateMap()
 	{
 		mCurrentMap = maps[mapIndex];
-
 		System.Random prng = new System.Random(mCurrentMap.seed); //PRNG:伪随机数生成器
+		this.GetComponent<BoxCollider>().size = new Vector3(mCurrentMap.mapSize.x * tileSize, 0.05f, mCurrentMap.mapSize.y * tileSize);
 
 		//初始化坐标
 		mAllTileCoords.Clear();
