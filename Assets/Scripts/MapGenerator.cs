@@ -20,7 +20,10 @@ public class MapGenerator : MonoBehaviour
 	private Map mCurrentMap;
 
 	private List<Coord> mAllTileCoords = new List<Coord>();
-	private Queue<Coord> mShuffledTileCoords = new Queue<Coord>();
+	private Queue<Coord> mShuffledTileCoords;
+	private Queue<Coord> mShuffledOpenTileCoords;
+
+	private Transform[,] mTileMap;
 
 	private void Start()
 	{
@@ -30,6 +33,7 @@ public class MapGenerator : MonoBehaviour
 	public void GenerateMap()
 	{
 		mCurrentMap = maps[mapIndex];
+		mTileMap = new Transform[mCurrentMap.mapSize.x, mCurrentMap.mapSize.y];
 		System.Random prng = new System.Random(mCurrentMap.seed); //PRNG:伪随机数生成器
 		this.GetComponent<BoxCollider>().size = new Vector3(mCurrentMap.mapSize.x * tileSize, 0.05f, mCurrentMap.mapSize.y * tileSize);
 
@@ -42,12 +46,8 @@ public class MapGenerator : MonoBehaviour
 				mAllTileCoords.Add(new Coord(x, y));
 			}
 		}
-		mShuffledTileCoords.Clear();
 		Coord[] shuffledArray = Utility.ShuffleArray(mAllTileCoords.ToArray(), mCurrentMap.seed);
-		foreach (Coord i in shuffledArray)
-		{
-			mShuffledTileCoords.Enqueue(i);
-		}
+		mShuffledTileCoords = new Queue<Coord>(shuffledArray);
 
 		//创建Map holder节点
 		string mapHolderName = "Generated Map Tiles";
@@ -70,12 +70,14 @@ public class MapGenerator : MonoBehaviour
 				newTile.name = "Tile [" + x + "," + y + "]";
 				newTile.parent = mapHolderTrans;
 				newTile.localScale = tileScale;
+				mTileMap[x, y] = newTile;
 			}
 		}
 		//生成障碍物
 		int obstacleCount = (int) (mCurrentMap.obstaclePercent * mCurrentMap.mapSize.x * mCurrentMap.mapSize.y);
 		int currentObstacleCount = 0;
 		bool[,] obstacleMap = new bool[(int) mCurrentMap.mapSize.x, (int) mCurrentMap.mapSize.y];
+		List<Coord> allOpenTileCoords = new List<Coord>(mAllTileCoords);
 		for (int i = 0; i < obstacleCount; i++)
 		{
 			Coord randomCoord = GetRandomCoord();
@@ -95,6 +97,8 @@ public class MapGenerator : MonoBehaviour
 				float colorPercent = (float) randomCoord.y / (float) mCurrentMap.mapSize.y;
 				obstacleMat.color = Color.Lerp(mCurrentMap.foregroundColor, mCurrentMap.backgroundColor, colorPercent);
 				obstacleRenderer.sharedMaterial = obstacleMat;
+
+				allOpenTileCoords.Remove(randomCoord);
 			}
 			else
 			{
@@ -102,6 +106,9 @@ public class MapGenerator : MonoBehaviour
 				currentObstacleCount--;
 			}
 		}
+
+		Coord[] shuffledOpenArray = Utility.ShuffleArray(allOpenTileCoords.ToArray(), mCurrentMap.seed);
+		mShuffledOpenTileCoords = new Queue<Coord>(shuffledOpenArray);
 
 		//生成Navmesh mask
 		Transform maskLeft = GameObject.Instantiate(navmeshMaskPrefab, (mCurrentMap.mapSize.x + maxMapSize.x) / 4f * tileSize * Vector3.left, Quaternion.identity) as Transform;
@@ -133,11 +140,28 @@ public class MapGenerator : MonoBehaviour
 		return pos;
 	}
 
+	public Transform GetTileByPosition(Vector3 pos)
+	{
+		int x = Mathf.RoundToInt(pos.x / tileSize + (mCurrentMap.mapSize.x - 1) / 2f);
+		int y = Mathf.RoundToInt(pos.z / tileSize + (mCurrentMap.mapSize.y - 1) / 2f);
+		
+		x = Mathf.Clamp(x, 0, mTileMap.GetLength(0) - 1);
+		y = Mathf.Clamp(y, 0, mTileMap.GetLength(1) - 1);
+		return mTileMap[x, y];
+	}
+
 	public Coord GetRandomCoord()
 	{
 		Coord randomCoord = mShuffledTileCoords.Dequeue();
 		mShuffledTileCoords.Enqueue(randomCoord);
 		return randomCoord;
+	}
+
+	public Transform GetRandomOpenTile()
+	{
+		Coord randomCoord = mShuffledOpenTileCoords.Dequeue();
+		mShuffledOpenTileCoords.Enqueue(randomCoord);
+		return mTileMap[randomCoord.x, randomCoord.y];
 	}
 
 	private bool IsMapFullyAccessible(bool[,] obstacleMap, int currentObstacleCount)
