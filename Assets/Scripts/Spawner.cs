@@ -142,6 +142,12 @@ public class Spawner : MonoBehaviour
 			{
 				OnNewWave(mCurrentWaveIndex);
 			}
+			ResetPlayerPosition();
 		}
+	}
+
+	void ResetPlayerPosition()
+	{
+		mPlayerTransform.position = mMapGenerator.GetTileByPosition(Vector3.zero).position + Vector3.up * 3;
 	}
 }

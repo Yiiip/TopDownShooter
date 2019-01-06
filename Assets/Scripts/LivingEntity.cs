@@ -30,6 +30,7 @@ public class LivingEntity : MonoBehaviour, IDamageable
 		}
 	}
 
+	[ContextMenu("立即死亡")]
 	public virtual void Die()
 	{
 		isDead = true;
