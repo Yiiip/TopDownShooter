@@ -19,7 +19,7 @@ public class Projectile : MonoBehaviour
 		Collider[] initialCollisions = Physics.OverlapSphere(this.transform.position, 0.1f, collideWhatLayer);
 		if (initialCollisions.Length > 0)
 		{
-			OnHitObject(initialCollisions[0]);
+			OnHitObject(initialCollisions[0], this.transform.position);
 		}
 	}
 
@@ -36,28 +36,17 @@ public class Projectile : MonoBehaviour
 		RaycastHit hit;
 		if (Physics.Raycast(ray, out hit, moveDistance + skinWidth, collideWhatLayer, QueryTriggerInteraction.Collide))
 		{
-			OnHitObject(hit);
+			OnHitObject(hit.collider, hit.point);
 		}
 	}
 
-	private void OnHitObject(RaycastHit hit)
-	{
-		// Debug.Log("子弹打到了" + hit.collider.name);
-		IDamageable damageableObj = hit.collider.GetComponent<IDamageable>();
-		if (damageableObj != null)
-		{
-			damageableObj.TakeHit(mDamage, hit);
-		}
-		Destroy(this.gameObject);
-	}
-
-	private void OnHitObject(Collider collider)
+	private void OnHitObject(Collider collider, Vector3 hitPoint)
 	{
 		// Debug.Log("子弹打到了" + collider.name);
 		IDamageable damageableObj = collider.GetComponent<IDamageable>();
 		if (damageableObj != null)
 		{
-			damageableObj.TakeHitWithDamage(mDamage);
+			damageableObj.TakeHit(mDamage, hitPoint, this.transform.forward);
 		}
 		Destroy(this.gameObject);
 	}

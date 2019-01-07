@@ -13,6 +13,8 @@ public class Enemy : LivingEntity
 		ATTACKING
 	}
 
+	public ParticleSystem deathEffect;
+
 	private State mState;
 
 	private NavMeshAgent mPathFinder;
@@ -56,6 +58,16 @@ public class Enemy : LivingEntity
 	{
 		hasTarget = false;
 		mState = State.IDLE;
+	}
+
+	public override void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
+	{
+		if (damage >= base.health)
+		{
+			GameObject effect = GameObject.Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection));
+			Destroy(effect, deathEffect.main.startLifetime.constant);
+		}
+		base.TakeHit(damage, hitPoint, hitDirection);
 	}
 
 	void Update()

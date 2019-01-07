@@ -15,13 +15,12 @@ public class LivingEntity : MonoBehaviour, IDamageable
 		health = startHealth;
 	}
 
-	public virtual void TakeHit(float damage, RaycastHit hit)
+	public virtual void TakeHit(float damage, Vector3 hitPoint, Vector3 hitDirection)
 	{
-		//TODO do some stuff with hit
 		TakeHitWithDamage(damage);
 	}
 
-	public void TakeHitWithDamage(float damage)
+	public virtual void TakeHitWithDamage(float damage)
 	{
 		health -= damage;
 		if (health <= 0 && !isDead)
