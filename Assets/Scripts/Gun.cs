@@ -6,6 +6,7 @@ public class Gun : MonoBehaviour
 {
 	public Transform muzzlePoint; //枪口
 	public ParticleSystem fireEfx;
+	public Light fireEfxLight;
 	public Projectile projectile;
 	public float muzzleVelocity;
 	public float timeBtwShoot = 100;
@@ -30,5 +31,10 @@ public class Gun : MonoBehaviour
 
 			Instantiate(this.shell, shellEjectionPoint.position, shellEjectionPoint.rotation);
 		}
+	}
+
+	private void Update()
+	{
+		fireEfxLight.gameObject.SetActive(fireEfx.isPlaying);
 	}
 }
