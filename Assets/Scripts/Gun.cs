@@ -10,6 +10,9 @@ public class Gun : MonoBehaviour
 	public float muzzleVelocity;
 	public float timeBtwShoot = 100;
 
+	public Transform shellEjectionPoint; //蛋壳发射点
+	public GameObject shell;
+
 	private float nextShootTime;
 
 	public void Shoot()
@@ -24,6 +27,8 @@ public class Gun : MonoBehaviour
 			shootProjectile.SetSpeed(muzzleVelocity);
 
 			fireEfx.Play();
+
+			Instantiate(this.shell, shellEjectionPoint.position, shellEjectionPoint.rotation);
 		}
 	}
 }
