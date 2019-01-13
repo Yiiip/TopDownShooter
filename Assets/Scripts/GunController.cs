@@ -29,11 +29,19 @@ public class GunController : MonoBehaviour
 		mEquippedGun.transform.localRotation = Quaternion.identity;
 	}
 
-	public void Shoot()
+	public void OnTriggerHold()
 	{
 		if (mEquippedGun != null)
 		{
-			mEquippedGun.Shoot();
+			mEquippedGun.OnTriggerHold();
+		}
+	}
+
+	public void OnTriggerRelease()
+	{
+		if (mEquippedGun != null)
+		{
+			mEquippedGun.OnTriggerRelease();
 		}
 	}
 }

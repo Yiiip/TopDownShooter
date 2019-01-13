@@ -4,22 +4,54 @@ using UnityEngine;
 
 public class Gun : MonoBehaviour
 {
+	public enum FireMode
+	{
+		Auto = 0,
+		Burst = 1,
+		Single = 2,
+		Count
+	}
+
 	public Transform muzzlePoint; //枪口
 	public ParticleSystem fireEfx;
 	public Light fireEfxLight;
 	public Projectile projectile;
 	public float muzzleVelocity;
 	public float timeBtwShoot = 100;
+	public int burstCount;
+	public FireMode fireMode;
 
 	public Transform shellEjectionPoint; //蛋壳发射点
 	public GameObject shell;
 
 	private float nextShootTime;
 
-	public void Shoot()
+	private bool triggerReleasedSinceLastShot;
+	private int shotsRemainInBurst;
+
+	private void Shoot()
 	{
 		if (Time.time > nextShootTime)
 		{
+			if (fireMode == FireMode.Burst)
+			{
+				if (shotsRemainInBurst == 0)
+				{
+					return;
+				}
+				else
+				{
+					--shotsRemainInBurst;
+				}
+			}
+			else if (fireMode == FireMode.Single)
+			{
+				if (!triggerReleasedSinceLastShot)
+				{
+					return;
+				}
+			}
+
 			nextShootTime = Time.time + timeBtwShoot / 1000f;
 			Projectile shootProjectile = Instantiate(this.projectile) as Projectile;
 			shootProjectile.transform.SetParent(muzzlePoint, false);
@@ -36,5 +68,17 @@ public class Gun : MonoBehaviour
 	private void Update()
 	{
 		fireEfxLight.gameObject.SetActive(fireEfx.isPlaying);
+	}
+
+	public void OnTriggerHold()
+	{
+		Shoot();
+		triggerReleasedSinceLastShot = false;
+	}
+
+	public void OnTriggerRelease()
+	{
+		triggerReleasedSinceLastShot = true;
+		shotsRemainInBurst = burstCount;
 	}
 }
