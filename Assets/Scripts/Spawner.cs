@@ -9,6 +9,13 @@ public class Spawner : MonoBehaviour
 		public string tag;
 		public int enemyCount;
 		public float timeBtwSpawn;
+
+		public float enemyMoveSpeed;
+		public float enemyHealth;
+		public int hitsToKillPlayer;
+		public Color enemySkinColor;
+
+		public bool infinite;
 	}
 
 	public Wave[] waves;
@@ -59,7 +66,7 @@ public class Spawner : MonoBehaviour
 				campPosOld = mPlayerTransform.position;
 			}
 
-			if (remainEnemiesToSpawn > 0 && Time.time > nextSpawnTime)
+			if ((remainEnemiesToSpawn > 0 || mCurrentWave.infinite) && Time.time > nextSpawnTime)
 			{
 				nextSpawnTime = Time.time + mCurrentWave.timeBtwSpawn;
 				remainEnemiesToSpawn--;
@@ -95,6 +102,7 @@ public class Spawner : MonoBehaviour
 		matTile.color = initColor;
 		Enemy spawned = Instantiate(enemy, tile.position + Vector3.up, Quaternion.identity) as Enemy;
 		spawned.OnDeath += OnEnemyDeath; //订阅事件
+		spawned.SetCharacteristics(mCurrentWave.enemyMoveSpeed, mCurrentWave.enemyHealth, mCurrentWave.hitsToKillPlayer, mCurrentWave.enemySkinColor);
 	}
 
 	void OnEnemyDeath()

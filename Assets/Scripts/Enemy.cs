@@ -1,4 +1,5 @@
-﻿using System.Collections;
+﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
@@ -32,12 +33,9 @@ public class Enemy : LivingEntity
 	private float selfCollisionRadius;
 	private float targetCollisionRadius;
 
-	protected override void Start()
+	private void Awake()
 	{
-		base.Start();
 		mPathFinder = this.GetComponent<NavMeshAgent>();
-		mSkinMaterial = this.GetComponent<Renderer>().material;
-		mOriginalColor = mSkinMaterial.color;
 		selfCollisionRadius = this.GetComponent<CapsuleCollider>().radius;
 
 		if (GameObject.FindWithTag("Player") != null)
@@ -46,12 +44,32 @@ public class Enemy : LivingEntity
 			mTarget = GameObject.FindWithTag("Player").transform;
 			mTargetEntity = mTarget.GetComponent<LivingEntity>();
 			targetCollisionRadius = mTarget.GetComponent<CapsuleCollider>().radius;
+		}
+	}
 
+	protected override void Start()
+	{
+		base.Start();
+		if (hasTarget)
+		{
+			mState = State.CHASING;
 			mTargetEntity.OnDeath += OnTargetDeath;
 
-			mState = State.CHASING;
 			StartCoroutine(UpdatePath());
 		}
+	}
+
+	public void SetCharacteristics(float enemyMoveSpeed, float enemyHealth, int hitsToKillPlayer, Color enemySkinColor)
+	{
+		mPathFinder.speed = enemyMoveSpeed;
+		startHealth = enemyHealth;
+		if (hasTarget)
+		{
+			attackDamage = Mathf.Ceil(mTargetEntity.startHealth / hitsToKillPlayer);
+		}
+		mSkinMaterial = this.GetComponent<Renderer>().material;
+		mSkinMaterial.color = enemySkinColor;
+		mOriginalColor = mSkinMaterial.color;
 	}
 
 	void OnTargetDeath()

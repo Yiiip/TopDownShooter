@@ -37,7 +37,7 @@ public class MapGenerator : MonoBehaviour
 
 	void OnNewWave(int waveNumber) //waveNumber: 0,1,2...
 	{
-		mapIndex = Mathf.Clamp(waveNumber / 1, 0, maps.Length - 1);
+		mapIndex = Mathf.Clamp(waveNumber / 2, 0, maps.Length - 1);
 		GenerateMap();
 	}
 
