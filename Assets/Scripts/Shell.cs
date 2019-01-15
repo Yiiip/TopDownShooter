@@ -4,7 +4,7 @@ using UnityEngine;
 
 public class Shell : MonoBehaviour
 {
-	public Rigidbody rigidbody;
+	private Rigidbody rb;
 	public float forceMin;
 	public float forceMax;
 
@@ -13,9 +13,10 @@ public class Shell : MonoBehaviour
 
 	void Start()
 	{
+		rb = GetComponent<Rigidbody>();
 		float force = Random.Range(forceMin, forceMax);
-		rigidbody.AddForce(this.transform.right * force);
-		rigidbody.AddTorque(Random.insideUnitCircle * force);
+		rb.AddForce(transform.right * force);
+		rb.AddTorque(Random.insideUnitCircle * force);
 
 		StartCoroutine(Fade());
 	}

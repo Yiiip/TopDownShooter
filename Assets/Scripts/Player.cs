@@ -7,6 +7,7 @@ using UnityEngine;
 public class Player : LivingEntity
 {
 	public float moveSpeed = 5.0f;
+	public Transform crosshairs;
 
 	private PlayerController mController;
 	private GunController mGunController;
@@ -29,13 +30,14 @@ public class Player : LivingEntity
 
 		// Look input
 		Ray ray = mMainCam.ScreenPointToRay(Input.mousePosition);
-		Plane virtualGround = new Plane(Vector3.up, Vector3.zero);
+		Plane virtualGround = new Plane(Vector3.up, Vector3.up * mGunController.GunHeight);
 		float rayDistance;
 		if (virtualGround.Raycast(ray, out rayDistance))
 		{
 			Vector3 endPoint = ray.GetPoint(rayDistance);
 			Debug.DrawLine(ray.origin, endPoint, Color.black);
 			mController.LookAt(endPoint);
+			crosshairs.position = endPoint;
 		}
 
 		// Weapon input
