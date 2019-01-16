@@ -19,6 +19,7 @@ public class GameUI : MonoBehaviour
 
 	void OnGameOver()
 	{
+		Cursor.visible = true;
 		fadePanel.DoFade(Color.clear, new Color(0, 0, 0, 0.9f), 1.5f);
 		gameOverPanel.SetActive(true);
 	}

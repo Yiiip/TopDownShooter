@@ -7,7 +7,7 @@ using UnityEngine;
 public class Player : LivingEntity
 {
 	public float moveSpeed = 5.0f;
-	public Transform crosshairs;
+	public Crosshairs crosshairs;
 
 	private PlayerController mController;
 	private GunController mGunController;
@@ -37,7 +37,8 @@ public class Player : LivingEntity
 			Vector3 endPoint = ray.GetPoint(rayDistance);
 			Debug.DrawLine(ray.origin, endPoint, Color.black);
 			mController.LookAt(endPoint);
-			crosshairs.position = endPoint;
+			crosshairs.transform.position = endPoint;
+			crosshairs.DetectTargets(ray);
 		}
 
 		// Weapon input

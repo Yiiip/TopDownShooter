@@ -88,7 +88,7 @@ public class Spawner : MonoBehaviour
 		}
 
 		Material matTile = tile.GetComponent<Renderer>().material;
-		Color initColor = matTile.color;
+		Color initColor = Color.white;
 		Color flashColor = Color.red;
 		float spawnTimer = 0.0f;
 
