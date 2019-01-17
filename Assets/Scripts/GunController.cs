@@ -45,6 +45,15 @@ public class GunController : MonoBehaviour
 		}
 	}
 
+	public void Aim(Vector3 aimPoint)
+	{
+		if (mEquippedGun != null)
+		{
+			mEquippedGun.Aim(aimPoint);
+			mEquippedGun.transform.eulerAngles = new Vector3(mEquippedGun.transform.eulerAngles.x, mEquippedGun.transform.eulerAngles.y - 90, mEquippedGun.transform.eulerAngles.z);
+		}
+	}
+
 	public float GunHeight
 	{
 		get

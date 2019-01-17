@@ -1196,7 +1196,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   waves:
   - tag: "\u7B2C\u4E00\u5173"
-    enemyCount: 3
+    enemyCount: 0
     timeBtwSpawn: 0.7
     enemyMoveSpeed: 2
     enemyHealth: 1

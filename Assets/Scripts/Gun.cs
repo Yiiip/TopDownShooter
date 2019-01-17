@@ -26,8 +26,16 @@ public class Gun : MonoBehaviour
 
 	private float nextShootTime;
 
-	private bool triggerReleasedSinceLastShot;
+	private bool triggerReleasedSinceLastShot = true;
 	private int shotsRemainInBurst;
+
+	private Vector3 shakeSmoothDampVelocity;
+	public Vector2 shakeMinMax;
+
+	private void Start()
+	{
+		shotsRemainInBurst = burstCount;
+	}
 
 	private void Shoot()
 	{
@@ -63,7 +71,7 @@ public class Gun : MonoBehaviour
 			}
 
 			fireEfx.Play();
-
+			Shake();
 			Instantiate(this.shell, shellEjectionPoint.position, shellEjectionPoint.rotation);
 		}
 	}
@@ -71,6 +79,8 @@ public class Gun : MonoBehaviour
 	private void Update()
 	{
 		fireEfxLight.gameObject.SetActive(fireEfx.isPlaying);
+
+		AnimShake();
 	}
 
 	public void OnTriggerHold()
@@ -83,5 +93,21 @@ public class Gun : MonoBehaviour
 	{
 		triggerReleasedSinceLastShot = true;
 		shotsRemainInBurst = burstCount;
+	}
+
+	public void Aim(Vector3 aimPoint)
+	{
+		transform.LookAt(aimPoint);
+	}
+
+	private void Shake()
+	{
+		transform.localPosition -= Vector3.up * Random.Range(0.1f, 0.2f);
+		transform.localPosition -= Vector3.right * Random.Range(shakeMinMax.x, shakeMinMax.y);
+	}
+
+	private void AnimShake()
+	{
+		transform.localPosition = Vector3.SmoothDamp(transform.localPosition, Vector3.zero, ref shakeSmoothDampVelocity, 0.1f);
 	}
 }

@@ -39,6 +39,10 @@ public class Player : LivingEntity
 			mController.LookAt(endPoint);
 			crosshairs.transform.position = endPoint;
 			crosshairs.DetectTargets(ray);
+			if ((new Vector2(endPoint.x, endPoint.z) - new Vector2(transform.position.x, transform.position.z)).sqrMagnitude > 2*2)
+			{
+				mGunController.Aim(endPoint);
+			}
 		}
 
 		// Weapon input

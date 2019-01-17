@@ -860,9 +860,10 @@ MonoBehaviour:
   muzzleVelocity: 14
   timeBtwShoot: 100
   burstCount: 3
-  fireMode: 2
+  fireMode: 0
   shellEjectionPoint: {fileID: 4385091626561502}
   shell: {fileID: 1898279262037706, guid: b08b6b29147f65a429ac2595ee16e00f, type: 2}
+  shakeMinMax: {x: 0.2, y: 1}
 --- !u!198 &198551741703974728
 ParticleSystem:
   m_ObjectHideFlags: 1
