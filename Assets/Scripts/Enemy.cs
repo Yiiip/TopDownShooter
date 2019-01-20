@@ -67,7 +67,7 @@ public class Enemy : LivingEntity
 		{
 			attackDamage = Mathf.Ceil(mTargetEntity.startHealth / hitsToKillPlayer);
 		}
-		mSkinMaterial = this.GetComponent<Renderer>().material;
+		mSkinMaterial = this.GetComponent<Renderer>().sharedMaterial;
 		mSkinMaterial.color = enemySkinColor;
 		mOriginalColor = mSkinMaterial.color;
 	}

@@ -5,16 +5,12 @@ using UnityEngine;
 public class GunController : MonoBehaviour
 {
 	public Transform weaponHoldPoint;
-	public Gun startGun;
+	[SerializeField] private Gun[] allGuns;
 
 	private Gun mEquippedGun;
 
 	public void Start()
 	{
-		if (startGun != null)
-		{
-			EquipGun(startGun);
-		}
 	}
 
 	public void EquipGun(Gun gunToEquip)
@@ -27,6 +23,12 @@ public class GunController : MonoBehaviour
 		mEquippedGun.transform.SetParent(weaponHoldPoint.transform, false);
 		mEquippedGun.transform.localPosition = Vector3.zero;
 		mEquippedGun.transform.localRotation = Quaternion.identity;
+	}
+
+	public void EquipGun(int gunIndex)
+	{
+		gunIndex = Mathf.Clamp(gunIndex, 0, allGuns.Length);
+		EquipGun(allGuns[gunIndex]);
 	}
 
 	public void OnTriggerHold()
@@ -50,7 +52,6 @@ public class GunController : MonoBehaviour
 		if (mEquippedGun != null)
 		{
 			mEquippedGun.Aim(aimPoint);
-			mEquippedGun.transform.eulerAngles = new Vector3(mEquippedGun.transform.eulerAngles.x, mEquippedGun.transform.eulerAngles.y - 90, mEquippedGun.transform.eulerAngles.z);
 		}
 	}
 

@@ -79,7 +79,6 @@ public class Gun : MonoBehaviour
 	private void Update()
 	{
 		fireEfxLight.gameObject.SetActive(fireEfx.isPlaying);
-
 		AnimShake();
 	}
 
@@ -98,6 +97,7 @@ public class Gun : MonoBehaviour
 	public void Aim(Vector3 aimPoint)
 	{
 		transform.LookAt(aimPoint);
+		transform.eulerAngles = new Vector3(transform.eulerAngles.x, transform.eulerAngles.y - 90, transform.eulerAngles.z);
 	}
 
 	private void Shake()

@@ -13,12 +13,17 @@ public class Player : LivingEntity
 	private GunController mGunController;
 	private Camera mMainCam;
 
-	protected override void Start()
+	private void Awake()
 	{
-		base.Start();
 		mController = this.GetComponent<PlayerController>();
 		mGunController = this.GetComponent<GunController>();
 		mMainCam = Camera.main;
+		FindObjectOfType<Spawner>().OnNewWave += OnNewWave;
+	}
+
+	protected override void Start()
+	{
+		base.Start();
 	}
 
 	private void Update()
@@ -35,7 +40,7 @@ public class Player : LivingEntity
 		if (virtualGround.Raycast(ray, out rayDistance))
 		{
 			Vector3 endPoint = ray.GetPoint(rayDistance);
-			Debug.DrawLine(ray.origin, endPoint, Color.black);
+			// Debug.DrawLine(ray.origin, endPoint, Color.black);
 			mController.LookAt(endPoint);
 			crosshairs.transform.position = endPoint;
 			crosshairs.DetectTargets(ray);
@@ -54,5 +59,11 @@ public class Player : LivingEntity
 		{
 			mGunController.OnTriggerRelease();
 		}
+	}
+
+	void OnNewWave(int waveNum)
+	{
+		health = startHealth;
+		mGunController.EquipGun(waveNum);
 	}
 }

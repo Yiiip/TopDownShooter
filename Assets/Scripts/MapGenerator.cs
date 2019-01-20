@@ -25,6 +25,8 @@ public class MapGenerator : MonoBehaviour
 
 	private Transform[,] mTileMap;
 
+	private int oneMapForWaveNum = 1;
+
 	private void Awake()
 	{
 		GenerateMap();
@@ -37,7 +39,8 @@ public class MapGenerator : MonoBehaviour
 
 	void OnNewWave(int waveNumber) //waveNumber: 0,1,2...
 	{
-		mapIndex = Mathf.Clamp(waveNumber / 2, 0, maps.Length - 1);
+		mapIndex = waveNumber / oneMapForWaveNum;
+		mapIndex = Mathf.Clamp(mapIndex, 0, maps.Length - 1);
 		GenerateMap();
 	}
 
