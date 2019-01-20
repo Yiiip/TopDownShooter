@@ -20,6 +20,7 @@ public class Gun : MonoBehaviour
 	public float timeBtwShoot = 100;
 	public int burstCount;
 	public FireMode fireMode;
+	public AudioClip shootSound;
 
 	public Transform shellEjectionPoint; //蛋壳发射点
 	public GameObject shell;
@@ -73,6 +74,7 @@ public class Gun : MonoBehaviour
 			fireEfx.Play();
 			Shake();
 			Instantiate(this.shell, shellEjectionPoint.position, shellEjectionPoint.rotation);
+			AudioManager.GetInstance().PlaySound(shootSound, transform.position);
 		}
 	}
 

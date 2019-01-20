@@ -1092,6 +1092,7 @@ MonoBehaviour:
   timeBtwShoot: 180
   burstCount: 3
   fireMode: 1
+  shootSound: {fileID: 8300000, guid: 6347f56822b1b8642a69c392ce84531b, type: 3}
   shellEjectionPoint: {fileID: 4385091626561502}
   shell: {fileID: 1898279262037706, guid: b08b6b29147f65a429ac2595ee16e00f, type: 2}
   shakeMinMax: {x: 0.6, y: 1}

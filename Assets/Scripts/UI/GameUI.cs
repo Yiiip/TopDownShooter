@@ -39,7 +39,7 @@ public class GameUI : MonoBehaviour
 	{
 		Spawner.Wave wave = mWaveSpawner.GetWaveByIndex(waveIndex);
 		TextWaveTitle.text = "- " + wave.tag + " -";
-		TextWaveEnemyCount.text = "Enemies: " + (wave.infinite ? "∞" : wave.enemyCount+"");
+		TextWaveEnemyCount.text = "Enemies " + (wave.infinite ? "∞" : "×" + wave.enemyCount);
 
 		StopCoroutine("AnimWaveInfoBanner");
 		StartCoroutine("AnimWaveInfoBanner");
