@@ -18,8 +18,9 @@ public class Spawner : MonoBehaviour
 		public bool infinite;
 	}
 
-	public Wave[] waves;
-	public Enemy enemy;
+	public bool devMode;
+	[SerializeField] private Wave[] waves;
+	[SerializeField] private Enemy enemy;
 	public float timeBtwWave = 3;
 
 	private int mCurrentWaveIndex = -1;
@@ -71,7 +72,20 @@ public class Spawner : MonoBehaviour
 				nextSpawnTime = Time.time + mCurrentWave.timeBtwSpawn;
 				remainEnemiesToSpawn--;
 
-				StartCoroutine(SpawnEnemy());
+				StartCoroutine("SpawnEnemy");
+			}
+		}
+
+		if (devMode)
+		{
+			if (mCurrentWaveIndex < waves.Length - 1 && Input.GetKeyDown(KeyCode.Tab))
+			{
+				StopCoroutine("SpawnEnemy");
+				foreach (Enemy e in FindObjectsOfType<Enemy>())
+				{
+					GameObject.Destroy(e.gameObject);
+				}
+				NextWave();
 			}
 		}
 	}
@@ -157,5 +171,10 @@ public class Spawner : MonoBehaviour
 	void ResetPlayerPosition()
 	{
 		mPlayerTransform.position = mMapGenerator.GetTileByPosition(Vector3.zero).position + Vector3.up * 3;
+	}
+
+	public Wave GetWaveByIndex(int index)
+	{
+		return waves[index];
 	}
 }
