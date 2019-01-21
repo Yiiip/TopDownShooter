@@ -10853,6 +10853,7 @@ GameObject:
   - component: {fileID: 761733448}
   - component: {fileID: 761733447}
   - component: {fileID: 761733449}
+  - component: {fileID: 761733450}
   m_Layer: 0
   m_Name: AudioManager
   m_TagString: Untagged
@@ -10903,6 +10904,36 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   mainMusic: {fileID: 8300000, guid: 0bd431ec1a05b3b468f52f26f1cb6392, type: 3}
   menuMusic: {fileID: 8300000, guid: ccacf8f0c640ce447a2301c98637386e, type: 3}
+--- !u!114 &761733450
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInternal: {fileID: 0}
+  m_GameObject: {fileID: 761733446}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 21ab6c3073df3b1458040d1bfa56812b, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  soundGroups:
+  - groupId: Impact
+    group:
+    - {fileID: 8300000, guid: 440e71425e61b7c44a5ec7c491fe12a6, type: 3}
+    - {fileID: 8300000, guid: 7ccd4ac39ba76dc4d8a7635b8c301467, type: 3}
+    - {fileID: 8300000, guid: a293fc894ed3f334e86347c160e6dcdb, type: 3}
+  - groupId: EnemyAttack
+    group:
+    - {fileID: 8300000, guid: ff07deee4ebaf464082b79ab1f31db4d, type: 3}
+  - groupId: EnemyDeath
+    group:
+    - {fileID: 8300000, guid: 8d867ad980098b64da48638fa335e245, type: 3}
+    - {fileID: 8300000, guid: 6b9a93b5261b6e548a014e09fb24558d, type: 3}
+  - groupId: PlayerDeath
+    group:
+    - {fileID: 8300000, guid: 7e959ce6474fbe24cb271bc41bd702c7, type: 3}
+  - groupId: WaveCompleted
+    group:
+    - {fileID: 8300000, guid: ac2a8dd93ed5adb4abd22170f5d6d83a, type: 3}
 --- !u!1 &767210845
 GameObject:
   m_ObjectHideFlags: 0
