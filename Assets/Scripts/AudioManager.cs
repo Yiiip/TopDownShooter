@@ -11,16 +11,20 @@ public class AudioManager : MonoBehaviour
 		MUSIC
 	}
 
-	[SerializeField] private float masterVolumePercent = 1f;
-	[SerializeField] private float sfxVolumePercent = 1f;
-	[SerializeField] private float musicVolumePercent = 1f;
+	public const string PREFS_MASTER_VOL = "MasterVol";
+	public const string PREFS_SFX_VOL = "SfxVol";
+	public const string PREFS_MUSIC_VOL = "MusicVol";
+
+	public float masterVolumePercent { get; private set; }
+	public float sfxVolumePercent { get; private set; }
+	public float musicVolumePercent { get; private set; }
 
 	private AudioSource sfx2DSources;
 	private AudioSource[] musicSources;
 	private int activeMusicSourceIndex;
 
 	public AudioListener audioListener;
-	public Transform audioListenerTarget;
+	private Transform audioListenerTarget;
 
 	private AudioLibrary audioLib;
 
@@ -55,6 +59,12 @@ public class AudioManager : MonoBehaviour
 			sfx2DSources = newSfx2DSource.AddComponent<AudioSource>();
 
 			LoadVolumeFormPrefs();
+
+			var target = FindObjectOfType<Player>();
+			if (target != null)
+			{
+				audioListenerTarget = target.transform;
+			}
 		}
 	}
 
@@ -120,28 +130,35 @@ public class AudioManager : MonoBehaviour
 
 	private void SaveVolumeToPrefs()
 	{
-		PlayerPrefs.SetFloat("MasterVol", masterVolumePercent);
-		PlayerPrefs.SetFloat("SfxVol", sfxVolumePercent);
-		PlayerPrefs.SetFloat("MusicVol", musicVolumePercent);
+		PlayerPrefs.SetFloat(PREFS_MASTER_VOL, masterVolumePercent);
+		PlayerPrefs.SetFloat(PREFS_SFX_VOL, sfxVolumePercent);
+		PlayerPrefs.SetFloat(PREFS_MUSIC_VOL, musicVolumePercent);
+		PlayerPrefs.Save();
 	}
 
 	private void LoadVolumeFormPrefs()
 	{
-		masterVolumePercent = PlayerPrefs.GetFloat("MasterVol", masterVolumePercent);
-		sfxVolumePercent = PlayerPrefs.GetFloat("SfxVol", sfxVolumePercent);
-		musicVolumePercent = PlayerPrefs.GetFloat("MusicVol", musicVolumePercent);
+		masterVolumePercent = PlayerPrefs.GetFloat(PREFS_MASTER_VOL, 1f);
+		sfxVolumePercent = PlayerPrefs.GetFloat(PREFS_SFX_VOL, 1f);
+		musicVolumePercent = PlayerPrefs.GetFloat(PREFS_MUSIC_VOL, 1f);
 	}
 
 	private void Update()
 	{
-		if (audioListener != null && audioListenerTarget != null)
+		if (audioListener != null)
 		{
-			audioListener.transform.position = audioListenerTarget.position;
+			if (audioListenerTarget == null)
+			{
+				var target = FindObjectOfType<Player>();
+				if (target != null)
+				{
+					audioListenerTarget = target.transform;
+				}
+			}
+			else
+			{
+				audioListener.transform.position = audioListenerTarget.position;
+			}
 		}
-	}
-
-	void OnDestroy()
-	{
-		sInstance = null;
 	}
 }
