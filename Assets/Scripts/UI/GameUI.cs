@@ -13,6 +13,8 @@ public class GameUI : MonoBehaviour
 	public Text TextWaveTitle;
 	public Text TextWaveEnemyCount;
 
+	public Text TextScore;
+
 	private LivingEntity mPlayerEntity;
 	private Spawner mWaveSpawner;
 
@@ -71,9 +73,20 @@ public class GameUI : MonoBehaviour
 		waveInfoBanner.gameObject.SetActive(false);
 	}
 
+	void Update()
+	{
+		TextScore.text = "SCORE: " + ScoreRecord.score.ToString("D6");
+	}
+
 	//For "Play Agin" button event.
 	public void StartNewGame()
 	{
 		SceneManager.LoadScene("Game");
+	}
+
+	//For "Back to Menu" button event.
+	public void BackToMenu()
+	{
+		SceneManager.LoadScene("MainMenu");
 	}
 }

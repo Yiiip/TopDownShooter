@@ -9,6 +9,7 @@ public class SettingsPanel : MonoBehaviour
 	public Slider[] volumeSliders;
 	public Text[] volumeTextViews;
 	public Toggle[] resolutionToggles;
+	public Toggle fullscreenToggle;
 	public int[] screenWidth;
 	private float aspectRatio = 16f / 9f;
 	private int activeResolutionIndex;
@@ -32,7 +33,8 @@ public class SettingsPanel : MonoBehaviour
 		}
 
 		bool fullscreen = PlayerPrefs.GetInt(PREFS_FULLSCREEN, 0) == 0 ? false : true;
-		SetFullScreen(fullscreen);
+		// SetFullScreen(fullscreen);
+		fullscreenToggle.isOn = fullscreen;
 	}
 
 	public void OnBack()

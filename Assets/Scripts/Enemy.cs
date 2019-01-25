@@ -15,6 +15,7 @@ public class Enemy : LivingEntity
 	}
 
 	public ParticleSystem deathEffect;
+	public static event System.Action OnDeathStatic;
 
 	private State mState;
 
@@ -83,6 +84,10 @@ public class Enemy : LivingEntity
 		AudioManager.GetInstance().PlaySound("Impact", transform.position);
 		if (damage >= base.health)
 		{
+			if (OnDeathStatic != null)
+			{
+				OnDeathStatic();
+			}
 			AudioManager.GetInstance().PlaySound("EnemyDeath", transform.position);
 			GameObject effect = GameObject.Instantiate(deathEffect.gameObject, hitPoint, Quaternion.FromToRotation(Vector3.forward, hitDirection));
 			Destroy(effect, deathEffect.main.startLifetime.constant);
