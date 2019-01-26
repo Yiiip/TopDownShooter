@@ -68,10 +68,11 @@ public class AudioManager : MonoBehaviour
 		}
 	}
 
-	public void PalyMusic(AudioClip clip, float fadeDuration = 1.0f)
+	public void PalyMusic(AudioClip clip, bool loop, float fadeDuration = 1.0f)
 	{
 		activeMusicSourceIndex = (activeMusicSourceIndex + 1) % 2;
 		musicSources[activeMusicSourceIndex].clip = clip;
+		musicSources[activeMusicSourceIndex].loop = loop;
 		musicSources[activeMusicSourceIndex].Play();
 		StartCoroutine(AnimateMusicCrossFade(fadeDuration));
 	}

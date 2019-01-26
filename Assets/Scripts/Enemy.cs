@@ -68,9 +68,13 @@ public class Enemy : LivingEntity
 		{
 			attackDamage = Mathf.Ceil(mTargetEntity.startHealth / hitsToKillPlayer);
 		}
-		mSkinMaterial = this.GetComponent<Renderer>().sharedMaterial;
+
+		ParticleSystem.MainModule deathParticle = deathEffect.main;
+		deathParticle.startColor = new Color(enemySkinColor.r, enemySkinColor.g, enemySkinColor.b, 1f);
+
+		mSkinMaterial = this.GetComponent<Renderer>().material;
 		mSkinMaterial.color = enemySkinColor;
-		mOriginalColor = mSkinMaterial.color;
+		mOriginalColor = enemySkinColor;
 	}
 
 	void OnTargetDeath()

@@ -59,6 +59,12 @@ public class Player : LivingEntity
 		{
 			mGunController.OnTriggerRelease();
 		}
+
+		//out of world edge
+		if (transform.position.y < -5f)
+		{
+			TakeHitWithDamage(health);
+		}
 	}
 
 	void OnNewWave(int waveNum)

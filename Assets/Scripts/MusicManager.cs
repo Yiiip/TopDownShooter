@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 [RequireComponent(typeof(AudioManager))]
 public class MusicManager : MonoBehaviour
@@ -8,16 +9,31 @@ public class MusicManager : MonoBehaviour
 	public AudioClip mainMusic;
 	public AudioClip menuMusic;
 
-	private void Start()
+	private static bool bindEvent = false;
+
+	private void Awake()
 	{
-		AudioManager.GetInstance().PalyMusic(mainMusic, 2);
+		if (!bindEvent)
+		{
+			SceneManager.sceneLoaded += OnSceneWasLoaded;
+			bindEvent = true;
+		}
 	}
 
-	private void Update()
+	void OnSceneWasLoaded(Scene scene, LoadSceneMode mode)
 	{
-		if (Input.GetKeyUp(KeyCode.M))
+		PlayMusic(scene.name);
+	}
+
+	private void PlayMusic(string sceneName)
+	{
+		if (sceneName == "MainMenu")
 		{
-			AudioManager.GetInstance().PalyMusic(menuMusic, 2);
+			AudioManager.GetInstance().PalyMusic(menuMusic, true, 1);
+		}
+		else if (sceneName == "Game")
+		{
+			AudioManager.GetInstance().PalyMusic(mainMusic, true, 1);
 		}
 	}
 }

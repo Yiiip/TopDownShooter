@@ -14,8 +14,12 @@ public class GameUI : MonoBehaviour
 	public Text TextWaveEnemyCount;
 
 	public Text TextScore;
+	public Text TextHp;
+	public Image ImgHpBar;
+	public RectTransform RectHpBar;
+	public Color colorHpBarHigher, colorHpBarMiddle, colorHpBarLower;
 
-	private LivingEntity mPlayerEntity;
+	private Player mPlayerEntity;
 	private Spawner mWaveSpawner;
 
 	void Awake()
@@ -76,6 +80,27 @@ public class GameUI : MonoBehaviour
 	void Update()
 	{
 		TextScore.text = "SCORE: " + ScoreRecord.score.ToString("D6");
+
+		float hpPercent = 0f;
+		if (mPlayerEntity != null)
+		{
+			hpPercent = mPlayerEntity.health / mPlayerEntity.startHealth;
+		}
+		if (hpPercent > 0.6f)
+		{
+			ImgHpBar.color = colorHpBarHigher;
+		}
+		else if (hpPercent > 0.4f && hpPercent <= 0.6f)
+		{
+			ImgHpBar.color = colorHpBarMiddle;
+		}
+		else if (hpPercent <= 0.4f)
+		{
+			ImgHpBar.color = colorHpBarLower;
+		}
+		float lerpHpRectX = Mathf.Lerp(RectHpBar.localScale.x, hpPercent, Time.deltaTime * 5);
+		RectHpBar.localScale = new Vector3(lerpHpRectX, 1f, 1f);
+		TextHp.text = System.Math.Round(lerpHpRectX * 100, 0).ToString() + "%";
 	}
 
 	//For "Play Agin" button event.
